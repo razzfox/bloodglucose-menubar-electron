@@ -1,0 +1,79 @@
+# Doc: https://gist.github.com/StephenBlackWasAlreadyTaken/adb0525344bedade1e25
+
+# Local vars
+@host = https://share1.dexcom.com/
+# @host = http://localhost
+@headers = Accept: application/json\nUser-Agent: Dexcom%20Share/3.0.2.11 CFNetwork/672.0.2 Darwin/14.0.0\nContent-Type: application/json
+
+@accountName = _
+@password = _
+@yourDexcomSerialNumber = _
+
+####
+# @name getDexcomTime
+GET {{host}}/ShareWebServices/Services/General/SystemUtcTime
+{{headers}}
+
+####
+# @name loginPublisherAccount
+POST {{host}}/ShareWebServices/Services/General/LoginPublisherAccountByName
+{{headers}}
+
+
+{
+  "accountName":{{accountName}},
+  "applicationId":"d8665ade-9673-4e27-9ff6-92db4ce13d13",
+  "password":{{password}}
+}
+
+####
+# @name createSession
+@createSessionBody = {{createSession.request.body.*}}
+@createSessionHeaders = {{createSession.request.headers.*}}
+
+# this will not work because of the quotes, can not .slice(1, -1)
+# @yourSessionID = {{loginPublisherAccount.response.body.*}}
+@yourSessionID = u-u-i-d-example
+@yourSessionID = be9aec37-28ad-41a5-af8d-39ee5f6febcb
+
+POST {{host}}/ShareWebServices/Services/Publisher/StartRemoteMonitoringSession?sessionId={{yourSessionID}}&serialNumber={{yourDexcomSerialNumber}}
+{{headers}}
+
+####
+# @name checkSessionActive
+POST {{host}}/ShareWebServices/Services/Publisher/IsRemoteMonitoringSessionActive?sessionId={{yourSessionID}}
+{{headers}}
+
+####
+# @name stopRemoteMonitoringSession
+POST {{host}}/ShareWebServices/Services/Publisher/StopRemoteMonitoringSession?sessionId={{yourSessionID}}
+{{headers}}
+
+####
+# @name checkMonitorAssignment
+POST {{host}}/ShareWebServices/Services/Publisher/CheckMonitoredReceiverAssignmentStatus?sessionId={{yourSessionID}}&serialNumber={{yourDexcomSerialNumber}}/
+{{headers}}
+
+####
+# List All Followers
+# @name listAllFollowers
+POST {{host}}/ShareWebServices/Services/Publisher/ListPublisherAccountSubscriptions?sessionId={{yourSessionID}}
+{{headers}}
+
+####
+# @name readLastBGV
+@readBGMinutes = 10
+@readBGCount = 1
+POST {{host}}/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues?sessionId={{yourSessionID}}&minutes={{readBGMinutes}}&maxCount={{readBGCount}}
+{{headers}}
+
+####
+# @name readBGV
+# 1440min = 24hr
+# @readBGMinutes = 1440
+# @readBGCount = 100
+POST {{host}}/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues?sessionId={{yourSessionID}}&minutes={{readBGMinutes}}&maxCount={{readBGCount}}
+{{headers}}
+
+####
+

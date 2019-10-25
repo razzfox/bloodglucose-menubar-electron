@@ -1,0 +1,30 @@
+{
+  "name": "bloodglucose-menubar-electron",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "jimp": "^0.8.5",
+    "node-fetch": "^2.6.0"
+  },
+  "main": "src/electron.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . --overwrite",
+    "update-build": "cp -r build src electron-video-editor-darwin-x64/electron-video-editor.app/Contents/Resources/app/"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^7.0.0"
+  }
+}
