@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "jimp": "^0.8.5",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.7"
   },
   "main": "src/electron.js",
   "scripts": {
